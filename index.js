@@ -30,8 +30,7 @@ app.listen(PORTA, () => {
 // seus dados mockados (simulando o banco de dados) 
 const listaDeClientes = [
     { id: 1, nome: `João Silva`, email: `joao.silva@example.com` },
-    { id: 2, nome: `Maria Santos`, email: `maria.santos@example.com` },
-    { id: 3, nome: `Pedro Almeida`, email: `pedro.almeida@example.com` }
+    { id: 2, nome: `Maria Santos`, email: `maria.santos@example.com` }
 ];
 
 //rota para listar todos os clientes (seu código original)
@@ -61,6 +60,6 @@ if (cliente) {
 app.post('/clientes', (req, res) => {
     //o middleware express.json() pega o corpo da requisição e o coloca em req.boddy
     const novoCliente = req.body; // body é um arquivo (obj)
-    console.log(`recebemos um novo cliente:`, novoCliente);
+    console.log(`criamos um novo cliente:`, novoCliente);
     res.json ({ message: `cliente ${novoCliente.novo} cadastrado com sucesso!`, data: novoCliente});
 });

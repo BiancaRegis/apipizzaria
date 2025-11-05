@@ -8,7 +8,8 @@ import morgan from 'morgan';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url'; //NECESSÁRIO PARA RECRUAR O '__dirname'.
-import db from './db/db.js'; // EXCLUIR DEPOIS
+//import db from './db/db.js'; // EXCLUIR DEPOIS
+import clienteRoutes from './routes/clienteRoutes.js';
 
 
 // HABILITA O EXPRESS PARA ENTENDER O FORMATO JSON NO CORPO DAS REQUISIÇÕES 
@@ -43,6 +44,10 @@ app.get('/', (request, response) => {
     //res = RESPOSTA (O QUE VAMOS ENVIAR DE VOLTA)
     response.sendFile(path.join(__dirname, '..', 'pages', 'home.html'));
 });
+
+//rotas de api prefixadas, isso evita conflitos e deixa claro quais rotas pertencem à APO.
+const apiPrefix = '/api';
+app.use(`${apiPrefix}/clientes`, clienteRoutes); //ex /api/clientes
 
 // --- TRATAMENTO DE ERROS ---
 // um middleware de erro centralizado.

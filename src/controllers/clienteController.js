@@ -32,8 +32,8 @@ export const listarClientes = async (req, res) => {
         const clientes = await clienteService.findAll();
         res.status(200).json(clientes);
     } catch (err) {
-        console.error(`erro ao buscar clientes:`, err);
-        res.status(500).json({ error: `erro interno do servidor` });
+        console.error('erro ao buscar clientes:', err);
+        res.status(500).json({ error: 'erro interno do servidor' });
     }
 };
 
@@ -42,7 +42,7 @@ export const listarClienteCpf = async (req, res) => {
         const { cpf } = req.params;
         const cliente = await clienteService.findByCpf(cpf);
         if (!cliente) {
-            return res.status(400).json({ error: `cliente não encontrado` });
+            return res.status(400).json({ error: 'cliente não encontrado' });
         }
         res.status(200).json(cliente);
     } catch (err) {
@@ -69,12 +69,12 @@ export const atualizarCliente = async (req, res) => {
         const { cpf } = req.params;
         const update = await clienteService.update(cpf, req.body);
         if (!update) {
-            return res.status(404).json({ error: `cliente não encontrado` });
+            return res.status(404).json({ error: 'cliente não encontrado' });
         }
-        res.status(200).json({ message: `cliente atualizado com sucesso` });
+        res.status(200).json({ message: 'cliente atualizado com sucesso' });
     } catch (err) {
-        console.error(`erro ao atualizar cliente:`, err);
-        res.status(500).json({ error: `erro ao atualizar cliente` });
+        console.error('erro ao atualizar cliente:', err);
+        res.status(500).json({ error: 'erro ao atualizar cliente' });
     }
 };
 

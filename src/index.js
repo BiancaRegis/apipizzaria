@@ -9,8 +9,14 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url'; //NECESSÁRIO PARA RECRUAR O '__dirname'.
 //import db from './db/db.js'; // EXCLUIR DEPOIS
+
+// //Importando as rotas.
+// Importa as rotas de autenticação 
+import authRoutes from './routes/authRoutes.js';
+
 import clienteRoutes from './routes/clienteRoutes.js';
 
+import produtoRoutes from './routes/produtoRoutes.js';
 
 // HABILITA O EXPRESS PARA ENTENDER O FORMATO JSON NO CORPO DAS REQUISIÇÕES 
 // avisa o express que o json será meu padrão, tudo que chegar do usuário será convertido em arquivo json
@@ -45,14 +51,19 @@ app.get('/', (request, response) => {
     response.sendFile(path.join(__dirname, '..', 'pages', 'home.html'));
 });
 
-//rotas de api prefixadas, isso evita conflitos e deixa claro quais rotas pertencem à APO.
+
+
 const apiPrefix = '/api';
+// Rotas gerais da API (ex: /api/sandro)
 app.use(`${apiPrefix}/clientes`, clienteRoutes); //ex /api/clientes
+app.use(`${apiPrefix}/login`, authRoutes); //Rota de login ex: /api/login
+app.use(`${apiPrefix}/produtos`, produtoRoutes); //ex: /api/produtos/
 
 // --- TRATAMENTO DE ERROS ---
 // um middleware de erro centralizado.
 app.use((err, req, res, next) => {
     console.error(err.stack);
+    
     res.status(500).send('algo deu errado no servidor!');
 });
 
@@ -63,11 +74,11 @@ app.listen(PORTA, () => {
     console.log(`servidor rodando na porta ${PORTA}.`);
 });
 
-// seus dados mockados (simulando o banco de dados) 
-const listaDeClientes = [
-    { id: 1, nome: `João Silva`, email: `joao.silva@example.com` },
-    { id: 2, nome: `Maria Santos`, email: `maria.santos@example.com` }
-];
+// // seus dados mockados (simulando o banco de dados) 
+// const listaDeClientes = [
+//     { id: 1, nome: `João Silva`, email: `joao.silva@example.com` },
+//     { id: 2, nome: `Maria Santos`, email: `maria.santos@example.com` }
+// ];
 
 //rota para listar todos os clientes (seu código original)
 app.get('/clientes', (req, res) => {

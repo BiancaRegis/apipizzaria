@@ -80,28 +80,28 @@ app.listen(PORTA, () => {
 //     { id: 2, nome: `Maria Santos`, email: `maria.santos@example.com` }
 // ];
 
-//rota para listar todos os clientes (seu código original)
-app.get('/clientes', (req, res) => {
-    res.json(listaDeClientes);
-});
+// //rota para listar todos os clientes (seu código original)
+// app.get('/clientes', (req, res) => {
+//     res.json(listaDeClientes);
+// });
 
-//NOVA ROTA: rota para buscar UM cliente pelo ID
-app.get('/clientes/:id', (req, res) => {
-    //1. CAPTURA O ID DA URL E CONVERTE PARA NÚMERO
-    const idDoCliente = parseInt(req.params.id);
+// //NOVA ROTA: rota para buscar UM cliente pelo ID
+// app.get('/clientes/:id', (req, res) => {
+//     //1. CAPTURA O ID DA URL E CONVERTE PARA NÚMERO
+//     const idDoCliente = parseInt(req.params.id);
 
-    //2. PROCURA O CLIENTE NO ARRAY USANDO O MÉTODO FIND()
-    const cliente = listaDeClientes.find(c => c.id === idDoCliente);
+//     //2. PROCURA O CLIENTE NO ARRAY USANDO O MÉTODO FIND()
+//     const cliente = listaDeClientes.find(c => c.id === idDoCliente);
 
-    //3. VERIFICA SE O CLIENTE FOI ENCONTRADO
-    if (cliente) {
-        //se encontrou, retorna o cliente com status 200 (OK)
-        res.json(cliente);
-    } else {
-        // se não encontrou, retorna um erro 404 (Not Found)
-        res.status(404).json({ mensagem: `cliente não encontrado.` });
-    }
-});
+//     //3. VERIFICA SE O CLIENTE FOI ENCONTRADO
+//     if (cliente) {
+//         //se encontrou, retorna o cliente com status 200 (OK)
+//         res.json(cliente);
+//     } else {
+//         // se não encontrou, retorna um erro 404 (Not Found)
+//         res.status(404).json({ mensagem: `cliente não encontrado.` });
+//     }
+// });
 
 //ROTA PARA CRIAR UM NOVO CLIENTE
 app.post('/clientes', (req, res) => {
@@ -110,3 +110,4 @@ app.post('/clientes', (req, res) => {
     console.log(`criamos um novo cliente:`, novoCliente);
     res.json({ message: `cliente ${novoCliente.novo} cadastrado com sucesso!`, data: novoCliente });
 }); 
+

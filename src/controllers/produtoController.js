@@ -4,11 +4,12 @@ import Joi from 'joi';
 
 //Validação dos campos com Joi
 export const produtoCreateSchema = Joi.object({
+    idProduto: Joi.string().required(),
     nome: Joi.string().required(),
     descricao: Joi.string().required(),
     tipo: Joi.string().required(),
-    imagem: Joi.string().allow('').required(),
-    valor: Joi.number().required()
+    imagem: Joi.string().allow(''),
+    valor: Joi.number().positive().required()
 });
 
 export const produtoUpdateSchema = Joi.object({
@@ -16,31 +17,23 @@ export const produtoUpdateSchema = Joi.object({
     descricao: Joi.string(),
     tipo: Joi.string(),
     imagem: Joi.string().allow(''),
-    valor: Joi.number()
+    valor: Joi.number().positive(),
 }).min(1);
 
 //Listar todos os produtos
 export const listarProdutos = async (req, res) => {
     try {
-        const produtos = await produtoService.findAll();
+        // capturamos os parâmetros de consukta de URL
+        // ex: ?minValor=10 / ?maxValor = 100 / ?nome=pizza / ?id=001
+        const { minValor, maxValor, nome, id, tipo} = req.query;
+        // passamos todos os filtros para o serviço
+        const produtos = await produtoService.findAll(minValor, maxValor, nome, id, tipo);
+        if (produtos.length === 0) {
+            return res.status(404).json({ message: "nenhum produto encontrado com esses filtros."});
+        }
         res.status(200).json(produtos);
     } catch (err) {
         console.error('erro ao buscar produtos:', err);
-        res.status(500).json({ error: 'erro interno do servidor' });
-    }
-};
-
-//Listar um produto por ID
-export const listarProdutoId = async (req, res) => {
-    try {
-        const { idProduto } = req.params;
-        const produto = await produtoService.findById(idProduto);
-        if (!produto) {
-            return res.status(404).json({ error: 'produto não encontrado' });
-        }
-        res.status(200).json(produto);
-    } catch (err) {
-        console.error('erro ao buscar produto:', err);
         res.status(500).json({ error: 'erro interno do servidor' });
     }
 };
@@ -52,6 +45,9 @@ export const adicionarProduto = async (req, res) => {
         res.status(201).json({ message: 'produto adicionado com sucesso', data: novoProduto });
     } catch (err) {
         console.error('erro ao adicionar produto:', err);
+        if (err.code === 'ER_DUP_ENTRY') {
+            return res.status(409).json({error: 'ID já cadastrado.'});
+        }
         res.status(500).json({ error: 'erro ao adicionar produto' });
     }
 };
@@ -60,6 +56,7 @@ export const adicionarProduto = async (req, res) => {
 export const atualizarProduto = async (req, res) => {
     try {
         const { idProduto } = req.params;
+        //a validação agora é feita pelo middleware
         const update = await produtoService.update(idProduto, req.body);
         if (!update) {
             return res.status(404).json({ error: 'produto não encontrado' });

@@ -12,9 +12,6 @@ router.post('/', validate(produtoCreateSchema), produtoController.adicionarProdu
 //Listar produtos
 router.get('/', produtoController.listarProdutos);
 
-//Listar produto por ID
-router.get('/:idProduto', produtoController.listarProdutoId);
-
 //Atualizar produto
 router.put('/:idProduto', validate(produtoUpdateSchema), produtoController.atualizarProduto);
 
